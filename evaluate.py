@@ -37,24 +37,24 @@ def get_source_references(source_file_path, preprocessed=False, language=''):
 
     return source_references
 
-parser = argparse.ArgumentParser(description='Compute BLEU score')
-parser.add_argument('--src', type=str, help='location of the source translation (i.e. output of your model')
-parser.add_argument('--trg', type=str, help='location of the target translation')
-parser.add_argument('--language', type=str, nargs='?', help='Language of the source translation (needed for de-preprocessing)')
-parser.add_argument("--preprocessed", type=str2bool, nargs='?', const=True, default=False, help="Revert pre-processing")
+parser = argparse.ArgumentParser(description="Compute BLEU score")
+parser.add_argument("--src", type=str, help="location of the source translation (i.e. output of your model")
+parser.add_argument("--trg", type=str, help="location of the target translation")
+parser.add_argument("--language", type=str, nargs="?", help="Language of the source translation (needed for de-preprocessing)")
+parser.add_argument("--preprocessed", type=str2bool, nargs="?", const=True, default=False, help="Revert pre-processing")
+parser.add_argument("--save", type=str, help="Location where the results should be stored")
 
 args = parser.parse_args()
 
+target_file_handler = open(args.trg, 'r')
+target_references = target_file_handler.readlines()
 source_file_path = args.src
 
 if os.path.isdir(source_file_path):
     files_in_dir = [os.path.join(source_file_path, file) for file in os.listdir(source_file_path) if os.path.isfile(os.path.join(source_file_path, file))]
-    print(files_in_dir)
-
-sys.exit()
-
-source_references = get_source_references(args.src, preprocessed=args.preprocessed, language=args.language)
-target_file_handler = open(args.trg, 'r')
-target_references = target_file_handler.readlines()
-
-print(str(sacrebleu.corpus_bleu(source_references, [target_references])))
+    for file in files_in_dir:
+        source_references = get_source_references(args.src, preprocessed=args.preprocessed, language=args.language)
+        print(file, str(sacrebleu.corpus_bleu(source_references, [target_references])))
+else:
+    source_references = get_source_references(args.src, preprocessed=args.preprocessed, language=args.language)
+    print(source_file_path, str(sacrebleu.corpus_bleu(source_references, [target_references])))
