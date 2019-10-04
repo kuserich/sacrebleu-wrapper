@@ -32,7 +32,7 @@ def get_source_references(source_file_path, preprocessed=False, language=''):
     source_file_handler = open(source_file_path, 'r')
     source_references = source_file_handler.readlines()
 
-    if de_preprocess:
+    if preprocessed:
         return de_preprocess(source_references, language)
 
     return source_references
