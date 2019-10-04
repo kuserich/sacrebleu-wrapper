@@ -8,7 +8,7 @@ BASE_DIR=${SCRIPTS_DIR}/..
 
 PYTHON_VERSION="python3.7"
 VENVS_DIR=${BASE_DIR}/venvs
-APP_NAME="BLEUette"
+APP_NAME="sacrebleu-wrapper"
 
 mkdir -p ${VENVS_DIR}
 
