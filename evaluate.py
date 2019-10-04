@@ -25,7 +25,7 @@ def de_preprocess(references, language):
     return clean_references
 
 def get_source_references(source_file_path, preprocessed=False, language=''):
-    if de_preprocess and not language:
+    if preprocessed and not language:
         print("[Error] Please provide a language for de-preprocessing")
         sys.exit()
 
