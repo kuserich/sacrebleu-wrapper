@@ -18,6 +18,11 @@ def de_preprocess(references, language):
     clean_references = []
     for item in references:
         item = item.replace("@@ ", "")
+        item = item.replace("@@@", "")
+        item = item.replace("@@@@", "")
+        item = item.replace("<eos>", "")
+        item = item.replace("@str", "")
+
         item = item.replace("\n", "")
         with MosesDetokenizer(language) as detokenize:
             item_clean = detokenize(item.split(" "))
