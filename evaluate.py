@@ -54,6 +54,7 @@ if os.path.isdir(source_file_path):
     files_in_dir = [os.path.join(source_file_path, file) for file in os.listdir(source_file_path) if os.path.isfile(os.path.join(source_file_path, file))]
     for file in files_in_dir:
         source_references = get_source_references(file, preprocessed=args.preprocessed, language=args.language)
+        print(source_references[:10])
         print(file, str(sacrebleu.corpus_bleu(source_references, [target_references])))
 
         if args.save:
