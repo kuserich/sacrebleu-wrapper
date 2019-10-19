@@ -70,7 +70,7 @@ for file in files_to_process:
         print(file, bleu)
 
         if args.save:
-            f = open(file + ".bleu", "a")
+            f = open(file + ".bleu", "w")
             f.write(bleu)
     except:
         print("An error occurred.")
