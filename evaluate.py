@@ -62,4 +62,5 @@ if os.path.isdir(source_file_path):
             f.write(str(sacrebleu.corpus_bleu(source_references, [target_references])))
 else:
     source_references = get_source_references(args.src, preprocessed=args.preprocessed, language=args.language)
+    print(source_references[:10])
     print(source_file_path, str(sacrebleu.corpus_bleu(source_references, [target_references])))
