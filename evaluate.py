@@ -42,6 +42,7 @@ def get_source_references(source_file_path, preprocessed=False, language=''):
 
     return source_references
 
+
 parser = argparse.ArgumentParser(description="Compute BLEU score")
 parser.add_argument("--src", type=str, help="location of the source translation (i.e. output of your model")
 parser.add_argument("--trg", type=str, help="location of the target translation")
@@ -55,15 +56,22 @@ target_file_handler = open(args.trg, 'r')
 target_references = target_file_handler.readlines()
 source_file_path = args.src
 
+files_to_process = []
+
 if os.path.isdir(source_file_path):
-    files_in_dir = [os.path.join(source_file_path, file) for file in os.listdir(source_file_path) if os.path.isfile(os.path.join(source_file_path, file))]
-    for file in files_in_dir:
-        source_references = get_source_references(file, preprocessed=args.preprocessed, language=args.language)
-        print(file, str(sacrebleu.corpus_bleu(source_references, [target_references])))
+    files_to_process = [os.path.join(source_file_path, file) for file in os.listdir(source_file_path) if os.path.isfile(os.path.join(source_file_path, file))]
+else:
+    files_to_process = [args.src]
+
+for file in files_to_process:
+    source_references = get_source_references(file, preprocessed=args.preprocessed, language=args.language)
+    try:
+        bleu = str(sacrebleu.corpus_bleu(source_references, [target_references]))
+        print(file, bleu)
 
         if args.save:
             f = open(file + ".bleu", "a")
-            f.write(str(sacrebleu.corpus_bleu(source_references, [target_references])))
-else:
-    source_references = get_source_references(args.src, preprocessed=args.preprocessed, language=args.language)
-    print(source_file_path, str(sacrebleu.corpus_bleu(source_references, [target_references])))
+            f.write(bleu)
+    except:
+        print("An error occurred.")
+        print("Skipped file: "+file)
