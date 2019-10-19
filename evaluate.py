@@ -42,7 +42,7 @@ parser.add_argument("--src", type=str, help="location of the source translation 
 parser.add_argument("--trg", type=str, help="location of the target translation")
 parser.add_argument("--language", type=str, nargs="?", help="Language of the source translation (needed for de-preprocessing)")
 parser.add_argument("--preprocessed", type=str2bool, nargs="?", const=True, default=False, help="Revert pre-processing")
-parser.add_argument("--save", type=str, help="Location where the results should be stored")
+parser.add_argument("--save", type=str2bool, nargs="?", const=True, default=True, help="Store a file with the results")
 
 args = parser.parse_args()
 
@@ -55,6 +55,10 @@ if os.path.isdir(source_file_path):
     for file in files_in_dir:
         source_references = get_source_references(file, preprocessed=args.preprocessed, language=args.language)
         print(file, str(sacrebleu.corpus_bleu(source_references, [target_references])))
+
+        if args.save:
+            f = open(file + ".bleu", "a")
+            f.write(str(sacrebleu.corpus_bleu(source_references, [target_references])))
 else:
     source_references = get_source_references(args.src, preprocessed=args.preprocessed, language=args.language)
     print(source_file_path, str(sacrebleu.corpus_bleu(source_references, [target_references])))
