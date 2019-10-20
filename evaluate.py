@@ -24,6 +24,9 @@ def de_preprocess(references, language):
         item = item.replace("<eos>", "")
         item = item.replace("@str", "")
 
+        item = item.replace("&amp;", "")
+        item = item.replace("# 160 ;", "")
+
         item = item.replace("\n", "")
         with MosesDetokenizer(language) as detokenize:
             item_clean = detokenize(item.split(" "))
