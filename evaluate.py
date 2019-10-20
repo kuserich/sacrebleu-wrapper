@@ -2,6 +2,7 @@ import sys
 import os
 import argparse
 import sacrebleu
+import json
 from mosestokenizer import *
 
 def str2bool(v):
@@ -66,12 +67,22 @@ else:
 for file in files_to_process:
     source_references = get_source_references(file, preprocessed=args.preprocessed, language=args.language)
     try:
-        bleu = str(sacrebleu.corpus_bleu(source_references, [target_references]))
-        print(file, bleu)
+        bleu = sacrebleu.corpus_bleu(source_references, [target_references])
+
+        print(file, str(bleu))
 
         if args.save:
-            f = open(file + ".bleu", "w")
-            f.write(bleu)
+            with open(file + ".bleu", "w") as outfile:
+                bleu_json = {
+                    "score": bleu.score,
+                    "precisions": bleu.precisions,
+                    "bp": bleu.bp,
+                    "sys_len": bleu.sys_len,
+                    "ref_len": bleu.ref_len,
+                    "ratio": bleu.sys_len / bleu.ref_len,
+                    "as_str": str(bleu),
+                }
+                json.dump(bleu_json, outfile)
     except:
         print("An error occurred.")
         print("Skipped file: "+file)
