@@ -1,6 +1,4 @@
 .idea
 src.txt
-trg.txt
-src.udpp.txt
-src.txt.bleu
+input
 venvs
