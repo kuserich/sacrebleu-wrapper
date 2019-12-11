@@ -24,9 +24,6 @@ def de_preprocess(references, language):
         item = item.replace("<eos>", "")
         item = item.replace("@str", "")
 
-        # item = item.replace("&amp;", "")
-        # item = item.replace("# 160 ;", "")
-
         item = item.replace("\n", "")
         with MosesDetokenizer(language) as detokenize:
             item_clean = detokenize(item.split(" "))
@@ -85,7 +82,7 @@ for file in files_to_process:
                     "ratio": bleu.sys_len / bleu.ref_len,
                     "as_str": str(bleu),
                 }
-                json.dump(bleu_json, outfile)
+                json.dump(bleu_json, outfile, indent=4, sort_keys=True)
     except:
         print("An error occurred.")
         print("Skipped file: "+file)
